@@ -1,3 +1,5 @@
+"use client";
+
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ModeToggle } from '@/components/layout/ModeToggle';
@@ -11,11 +13,34 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useUserStore } from '@/store/useUserStore';
 import { Newspaper, BookmarkIcon, History, Settings, User, LogOut } from 'lucide-react';
+import { useSession, signOut } from 'next-auth/react';
+import { useEffect } from 'react';
 
 export function Header() {
+  const { data: session } = useSession();
   const user = useUserStore((state) => state.user);
   const isAuthenticated = useUserStore((state) => state.isAuthenticated);
+  const setUser = useUserStore((state) => state.setUser);
   const logout = useUserStore((state) => state.logout);
+  
+  // NextAuth 세션 정보를 Zustand 스토어와 동기화
+  useEffect(() => {
+    if (session?.user) {
+      // NextAuth 사용자 정보를 Zustand 스토어에 저장
+      setUser({
+        id: session.user.id || session.user.email || '',
+        name: session.user.name || '사용자',
+        email: session.user.email || '',
+        preferences: {
+          categories: session.user.preferences?.categories || [],
+          sources: session.user.preferences?.sources || [],
+          authors: session.user.preferences?.authors || []
+        },
+        bookmarks: session.user.bookmarks || [],
+        readHistory: session.user.readHistory || []
+      });
+    }
+  }, [session, setUser]);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -90,7 +115,10 @@ export function Header() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="cursor-pointer"
-                  onClick={() => logout()}
+                  onClick={() => {
+                    signOut({ callbackUrl: '/' });
+                    logout();
+                  }}
                 >
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>로그아웃</span>
