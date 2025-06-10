@@ -13,11 +13,9 @@ import { useUserStore } from '@/store/useUserStore';
 import { Newspaper, BookmarkIcon, History, Settings, User, LogOut } from 'lucide-react';
 
 export function Header() {
-  const { user, isAuthenticated, logout } = useUserStore((state) => ({
-    user: state.user,
-    isAuthenticated: state.isAuthenticated,
-    logout: state.logout,
-  }));
+  const user = useUserStore((state) => state.user);
+  const isAuthenticated = useUserStore((state) => state.isAuthenticated);
+  const logout = useUserStore((state) => state.logout);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

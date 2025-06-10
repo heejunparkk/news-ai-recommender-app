@@ -23,7 +23,7 @@ interface UserState {
 // 초기 상태는 persist 미들웨어에서 관리합니다
 
 export const useUserStore = create<UserState>()(
-  persist(
+    persist(
     (set) => ({
       user: null,
       isAuthenticated: false,
@@ -96,7 +96,7 @@ export const useUserStore = create<UserState>()(
           return {
             user: {
               ...state.user,
-              preferences: {
+          preferences: {
                 ...state.user.preferences,
                 sources: state.user.preferences.sources.filter((s) => s !== source),
               },
