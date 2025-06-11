@@ -34,7 +34,7 @@ export interface Category {
   icon?: string;
 }
 
-export type SortOption = 'newest' | 'relevance' | 'popularity';
+export type SortOption = 'all' | 'newest' | 'relevance' | 'popularity';
 
 export interface NewsFilters {
   categories: string[];
@@ -60,4 +60,10 @@ export interface PaginationResult<T> {
   limit: number;
   totalPages: number;
   totalItems: number;
+  isFromCache?: boolean;
+  cacheTimestamp?: number;
+  error?: {
+    code: number;
+    message: string;
+  };
 }

@@ -70,9 +70,10 @@ export function NewsFilters({ filters, onFilterChange, onReset }: NewsFiltersPro
               <SelectValue placeholder="정렬 기준" />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value="all">전체보기</SelectItem>
               <SelectItem value="newest">최신순</SelectItem>
-              <SelectItem value="relevance">관련성</SelectItem>
               <SelectItem value="popularity">인기순</SelectItem>
+              <SelectItem value="relevance">관련성</SelectItem>
             </SelectContent>
           </Select>
           
