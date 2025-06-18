@@ -18,11 +18,22 @@ interface NewsFiltersProps {
 
 export function NewsFilters({ filters, onFilterChange, onReset }: NewsFiltersProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [searchInput, setSearchInput] = useState(filters.searchQuery);
   const { data: categories = [] } = useCategories();
   const { data: sources = [] } = useSources();
   
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onFilterChange({ searchQuery: e.target.value });
+    setSearchInput(e.target.value);
+  };
+  
+  const handleSearch = () => {
+    onFilterChange({ searchQuery: searchInput });
+  };
+  
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
   };
   
   const handleSortChange = (value: SortOption) => {
@@ -54,14 +65,20 @@ export function NewsFilters({ filters, onFilterChange, onReset }: NewsFiltersPro
   return (
     <div className="mb-6 space-y-4">
       <div className="flex flex-col sm:flex-row gap-4">
-        <div className="relative flex-grow">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="뉴스 검색..."
-            className="pl-9"
-            value={filters.searchQuery}
-            onChange={handleSearchChange}
-          />
+        <div className="relative flex-grow flex gap-2">
+          <div className="relative flex-grow">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="뉴스 검색..."
+              className="pl-9"
+              value={searchInput}
+              onChange={handleSearchChange}
+              onKeyDown={handleKeyDown}
+            />
+          </div>
+          <Button onClick={handleSearch} type="button">
+            검색
+          </Button>
         </div>
         
         <div className="flex gap-2">
