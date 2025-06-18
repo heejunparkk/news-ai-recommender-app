@@ -41,7 +41,7 @@ declare module "next-auth" {
 const prisma = new PrismaClient();
 
 // NextAuth 설정
-export const authOptions: NextAuthOptions = {
+const authOptions: NextAuthOptions = {
   providers: [
     // Google 로그인
     GoogleProvider({
@@ -150,5 +150,9 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET || "your-secret-key",
 };
 
+// Next.js 15.3.3에서는 API 라우트 핸들러 생성 방식이 변경됨
 const handler = NextAuth(authOptions);
-export { handler as GET, handler as POST };
+
+// 타입 오류를 해결하기 위해 명시적으로 타입을 지정하여 내보냄
+export const GET = handler.GET;
+export const POST = handler.POST;
